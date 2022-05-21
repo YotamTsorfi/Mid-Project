@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>    
+    <link rel='stylesheet' href='/stylesheets/tablestyle.css' />     
+</head>
+  
+  <body>    
+    <h3>Search Results Page</h3>
+ 
+    <table>
+        <% movies.moviesName.forEach(function(movie) { %>
+        <tr>
+          <th>Movie Name</th>
+          
+          <th>Movies with same genre</th>                              
+        </tr>
+        <tr>
+          <td>
+            <a href="/movies/<%= movie%> ">    <%= movie %> </a>
+          </td>
+            
+          <td>             
+            <% movies.moviesWithSameGenre.forEach(function(mov) { %>
+              <a href="/movies/<%= mov%> ">    <%= mov %> </a>
+              <br/>
+            <% }) %>      
+          </td>
+        </tr>
+        <% }) %>
+    </table>
+
+    <a href="/movies/menuPage" target="_self">Back</a>
+    <body>
+
+  </body>
+</html>

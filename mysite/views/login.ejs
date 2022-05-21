@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/login.css' />
+  </head>
+  <body>
+    Counter: <%= counterVal %>
+    <form action="/users/validation" method="post">
+    <main>
+      <div class="row">
+          <div class="colm-form">
+              <div class="form-container">
+                  <input type="text" name="name" placeholder="UserName">
+                  <input type="password" name="pass" placeholder="Password">
+                  <button class="btn-login" type="submit" value="Login">Login</button>                         
+              </div>           
+          </div>
+      </div>
+  </main>
+</form>
+
+
+    <% if (result != "true") { %>
+      <p> Not Allowed. </p>
+    <% } %>
+      
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>    
+    <link rel='stylesheet' href='/stylesheets/tablestyle.css' />     
+</head>
+  
+  <body>    
+    <h3>Movie Data Page</h3>
+    
+    Id : <%= movie.oId %> <br>
+    Name : <%= movie.oName %> <br>
+    Genres : <%= movie.oGenres %> <br>
+    Language : <%= movie.oLanguage %> <br>
+    
+    <img src="<%= movie.oImage %>" width=350" height="270"  onerror='this.style.display = "none"'>
+
+    <br/>
+
+    <input type="button" value="Back" onclick="history.back(-1)" /> 
+
+    <body>
+
+  </body>
+</html>
