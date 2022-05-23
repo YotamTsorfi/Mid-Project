@@ -13,6 +13,19 @@ const userBL = require("../models/userBL");
 
     const users = await userBL.checkCredentials(obj);
 
+    // First initialize the user session to track it later
+    if(!req.session.mycounter)
+    {
+        req.session.username = obj.name;
+        req.session.mycounter = 0;
+    }
+    else{
+        req.session.mycounter += 1;
+        req.session.username = obj.name;
+    }
+    //console.log("obj.name: ", obj.name);
+    //console.log(req.session);
+ 
     if (users) {
       res.render("menuPage", { title: "Menu Page" });
     }
@@ -26,10 +39,25 @@ const userBL = require("../models/userBL");
   // accessed ONLY for Admin
   router.get('/usermanagment', async function(req, res, next) {
 
-  const allusers = await userBL.getAllUsers();
+    // First Check if Admin is login in this session, if not, redirect the 
+    // User back to Menu Page.
+    if( req.session.username == 'admin'){
+      const allusers = await userBL.getAllUsers();
+      res.render('usermanagement', {allusers});
+    }
+    else{
+      res.render("menuPage", { title: "Menu Page" });
+    }
+    
 
-  res.render('usermanagement', {allusers});
+  
   });
+
+
+
+
+
+
 
 
   router.get('/userDataPage', async function(req, res, next) {  

@@ -22,7 +22,10 @@ var app = express();
 app.use(session({
   secret :  'mysecret',
   resave : false,
-  saveUninitialized : false
+  saveUninitialized : false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 //Equals 1 day
+  }
 }));
 
 

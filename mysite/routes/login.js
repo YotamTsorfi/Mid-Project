@@ -6,18 +6,12 @@ var router = express.Router();
 router.get('/', async function(req, res, next)
 {
 
-    if(!req.session.mycounter)
-    {
-        req.session.mycounter = 1;
-    }
-    else{
-        req.session.mycounter += 1;
-    }
+    //console.log(req.session);
     // Save in the session the current date
     // Save amount of Actions until now
     //Every Day The Actions will be reset?
 
-    res.render('login', {result: "true", counterVal : req.session.mycounter });
+    res.render('login', {result: "true"});
 });
 
 
