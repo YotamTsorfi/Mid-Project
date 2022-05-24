@@ -7,6 +7,11 @@ const moviesBL = require('../models/moviesBL');
     //1. Pressing create button count as 1 action        
     req.session.mycounter += 1;
     console.log(req.session);
+
+    if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
+      res.render('login', { result: "false" });
+    }
+
     const obj = req.body;
     const result = await moviesBL.addMovie(obj);         
     if (result == "OK") { 
@@ -34,6 +39,12 @@ const moviesBL = require('../models/moviesBL');
      //1. Pressing create button count as 1 action        
      req.session.mycounter += 1;
      console.log(req.session);
+
+    if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
+      res.render('login', { result: "false" });
+      return res.json()
+    }
+
     let name = req.params.name;  
     let movie = await moviesBL.getMovieDataByName(name);
     res.render("movieData", {movie});
@@ -46,8 +57,15 @@ const moviesBL = require('../models/moviesBL');
     //1. Pressing search button count as 1 action        
     req.session.mycounter += 1;
     console.log(req.session);
+    
+    if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
+      res.render('login', { result: "false" });
+      return res.json()
+    }
+    
     // Note if user refresh the page mycounter increasing by 1
     // TODO (Find a way to avoid it)
+
 
     //2. Send obj to moviesBL and get in return the movies
     const movies = await moviesBL.getMoviesData(obj);

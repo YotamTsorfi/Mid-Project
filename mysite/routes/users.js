@@ -10,7 +10,8 @@ const userBL = require("../models/userBL");
   router.post("/validation", async function (req, res, next) {
     const obj = req.body;
     const users = await userBL.checkCredentials(obj);
-    // First initialize the user session to track it later
+    
+    // Check if mycounter exceeded 5 (5 Actions per day)
     if(!req.session.mycounter)
     {
         req.session.username = obj.name;
@@ -18,7 +19,13 @@ const userBL = require("../models/userBL");
     }
     else{
         req.session.mycounter += 1;
+        console.log(req.session);
         req.session.username = obj.name;
+
+        if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
+          res.render('login', { result: "false" });
+          return res.json()
+        }
     } 
     console.log(req.session);
     if (users) {
@@ -28,8 +35,7 @@ const userBL = require("../models/userBL");
       res.render('login', { result: "false" });
     }
   });
-
-  // accessed ONLY for Admin
+  
   router.get('/usermanagment', async function(req, res, next) {
     // First Check if Admin is login in this session, if not, redirect the 
     // User back to Menu Page.
@@ -53,7 +59,6 @@ const userBL = require("../models/userBL");
       res.render('usermanagement', {allusers});
   });
 
-  //Can be access just for admin
   router.get('/update/:Username', async function(req, res, next) {
     const userName = req.params.Username;
     const userToEdit = await userBL.getUserByName(userName);
