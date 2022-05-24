@@ -11,9 +11,10 @@
     <p><a href="/movies/createMovie">Create new movie</a></p> <!-- Create Movie Page -->
 
 
-    <!-- redirect - ONLY for admin -->
+    <!-- presented - ONLY for admin -->
+    <% if( req.session.username == 'admin'){ %>
     <p><a href="/users/usermanagment">Edit Users</a></p> <!-- Users Management Page  -->
-
+    <% } %>  
 
 
 

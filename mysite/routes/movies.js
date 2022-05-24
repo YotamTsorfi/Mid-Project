@@ -4,15 +4,11 @@ const moviesBL = require('../models/moviesBL');
 
 
   router.post("/createMovie", async function (req, res, next) {
-
     //1. Pressing create button count as 1 action        
     req.session.mycounter += 1;
     console.log(req.session);
-
     const obj = req.body;
-  
-    const result = await moviesBL.addMovie(obj);
-          
+    const result = await moviesBL.addMovie(obj);         
     if (result == "OK") { 
      
       res.render("menuPage", { title: "Menu Page" });
@@ -20,7 +16,6 @@ const moviesBL = require('../models/moviesBL');
     else{
       //res.render('login', { result: "false" });
     }
-  
   });
 
   router.get("/menuPage", async function (req, res, next) {   
@@ -31,7 +26,7 @@ const moviesBL = require('../models/moviesBL');
     res.render('createMoviePage', {});    
   });
   
-  router.get("/searchMovie", async function (req, res, next) {           
+  router.get("/searchMovie", async function (req, res, next) {     
     res.render('searchMovie', {});    
   });
 
@@ -39,9 +34,7 @@ const moviesBL = require('../models/moviesBL');
      //1. Pressing create button count as 1 action        
      req.session.mycounter += 1;
      console.log(req.session);
-
-    let name = req.params.name;
-  
+    let name = req.params.name;  
     let movie = await moviesBL.getMovieDataByName(name);
     res.render("movieData", {movie});
   });
@@ -49,8 +42,7 @@ const moviesBL = require('../models/moviesBL');
 
 
   router.post("/searchMovie", async function (req, res, next) {
-    const obj = req.body;
-  
+    const obj = req.body;  
     //1. Pressing search button count as 1 action        
     req.session.mycounter += 1;
     console.log(req.session);
@@ -62,11 +54,6 @@ const moviesBL = require('../models/moviesBL');
     
     //3. render "Search Results Page" and send their a new obj with all movies        
     res.render("searchResultsPage", {movies});
-  
   });
-
-
-
-
 
   module.exports = router;
