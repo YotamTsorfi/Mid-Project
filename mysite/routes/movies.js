@@ -1,21 +1,23 @@
 var express = require('express');
 var router = express.Router();
 const moviesBL = require('../models/moviesBL');
-
+const userBL = require("../models/userBL");
 
   router.post("/createMovie", async function (req, res, next) {
     //1. Pressing create button count as 1 action        
-    req.session.mycounter += 1;
-    console.log(req.session);
+    await userBL.updateNumofTransactions(req.session.username); 
 
-    if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
-      res.render('login', { result: "false" });
-    }
+    const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
+    console.log("numOfTrans: " , numOfTrans);
+
+    // if((req.session.mycounter >= 5 && req.session.username != 'admin') || req.session.username == 'undefined' ){
+    //   res.render('login', { result: "false" });
+    //   return res.json()
+    // }
 
     const obj = req.body;
     const result = await moviesBL.addMovie(obj);         
-    if (result == "OK") { 
-     
+    if (result == "OK") {      
       res.render("menuPage", { title: "Menu Page" });
     }
     else{
@@ -37,13 +39,15 @@ const moviesBL = require('../models/moviesBL');
 
   router.get("/:name", async function (req, res, next) {
      //1. Pressing create button count as 1 action        
-     req.session.mycounter += 1;
-     console.log(req.session);
+    await userBL.updateNumofTransactions(req.session.username); 
 
-    if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
-      res.render('login', { result: "false" });
-      return res.json()
-    }
+    const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
+    console.log("numOfTrans: " , numOfTrans);
+
+    // if((req.session.mycounter >= 5 && req.session.username != 'admin') || req.session.username == 'undefined' ){
+    //   res.render('login', { result: "false" });
+    //   return res.json()
+    // }
 
     let name = req.params.name;  
     let movie = await moviesBL.getMovieDataByName(name);
@@ -55,13 +59,14 @@ const moviesBL = require('../models/moviesBL');
   router.post("/searchMovie", async function (req, res, next) {
     const obj = req.body;  
     //1. Pressing search button count as 1 action        
-    req.session.mycounter += 1;
-    console.log(req.session);
+    await userBL.updateNumofTransactions(req.session.username); 
+    const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
+    console.log("numOfTrans: " , numOfTrans);
     
-    if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
-      res.render('login', { result: "false" });
-      return res.json()
-    }
+    // if((req.session.mycounter >= 5 && req.session.username != 'admin') || req.session.username == 'undefined' ){
+    //   res.render('login', { result: "false" });
+    //   return res.json()
+    // }
     
     // Note if user refresh the page mycounter increasing by 1
     // TODO (Find a way to avoid it)

@@ -1,6 +1,29 @@
 const userDal = require('../repository/userDAL');
 
 
+const updateNumofTransactions = async (username) => {
+    const users = await userDal.getUsers();
+    const usersData = users.users;
+    let newUsersData = usersData;
+
+    objIndex = usersData.findIndex( x => x.Username == username);
+
+    if(objIndex > -1){//Update this user        
+        newUsersData[objIndex].NumofTransactions++;
+        const result = await userDal.updateOrAddUser(newUsersData);
+        return result;
+    }        
+}
+
+
+const getUserNumofTransactions = async (username) => {
+    const users = await userDal.getUsers();
+    const usersData = users.users;
+    const user = usersData.filter(user => user.Username == username);    
+    return user[0].NumofTransactions;
+}
+
+
 
 const checkCredentials = async (obj) => {
 
@@ -72,10 +95,4 @@ const updateOrCreateUser = async (obj) => {
 }
 
 
-
-
-
-
-
-
-module.exports = {checkCredentials, getAllUsers, deleteUserByName, getUserByName, updateOrCreateUser}
+module.exports = {checkCredentials, getAllUsers, deleteUserByName, getUserByName, updateOrCreateUser, updateNumofTransactions, getUserNumofTransactions}

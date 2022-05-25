@@ -11,23 +11,11 @@ const userBL = require("../models/userBL");
     const obj = req.body;
     const users = await userBL.checkCredentials(obj);
     
-    // Check if mycounter exceeded 5 (5 Actions per day)
-    if(!req.session.mycounter)
-    {
-        req.session.username = obj.name;
-        req.session.mycounter = 0;
-    }
-    else{
-        req.session.mycounter += 1;
-        console.log(req.session);
-        req.session.username = obj.name;
+    req.session.username = obj.name;
 
-        if(req.session.mycounter >= 5 && req.session.username != 'admin' ){
-          res.render('login', { result: "false" });
-          return res.json()
-        }
-    } 
-    console.log(req.session);
+    const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
+    console.log("number Of Transactions for" , req.session.username , "is", numOfTrans);
+
     if (users) {
       res.render("menuPage", { title: "Menu Page" , req});
     }

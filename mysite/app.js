@@ -24,7 +24,8 @@ app.use(session({
   resave : false,
   saveUninitialized : false,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 //Equals 1 day
+    //maxAge: 1000 * 60 * 60 * 24 //Equals 1 day
+    expires: new Date(Date.now() + (1000 * 60 * 60 * 24)) 
   }
 }));
 
