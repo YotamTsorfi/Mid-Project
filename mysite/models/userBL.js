@@ -15,6 +15,33 @@ const updateNumofTransactions = async (username) => {
     }        
 }
 
+const updateCreatedDate = async (username, date) => {
+    const users = await userDal.getUsers();
+    const usersData = users.users;
+    let newUsersData = usersData;
+
+    objIndex = usersData.findIndex( x => x.Username == username);
+
+    if(objIndex > -1){//Update this user        
+        newUsersData[objIndex].CreatedDate = date;
+        const result = await userDal.updateOrAddUser(newUsersData);
+        return result;
+    }        
+}
+
+
+const getCreatedDate = async (username) => {
+    const users = await userDal.getUsers();
+    const usersData = users.users;
+    let newUsersData = usersData;
+
+    objIndex = usersData.findIndex( x => x.Username == username);
+
+    if(objIndex > -1){//Update this user        
+        return newUsersData[objIndex].CreatedDate;
+    }        
+}
+
 
 const getUserNumofTransactions = async (username) => {
     const users = await userDal.getUsers();
@@ -95,4 +122,4 @@ const updateOrCreateUser = async (obj) => {
 }
 
 
-module.exports = {checkCredentials, getAllUsers, deleteUserByName, getUserByName, updateOrCreateUser, updateNumofTransactions, getUserNumofTransactions}
+module.exports = {checkCredentials, getAllUsers, deleteUserByName, getUserByName, updateOrCreateUser, updateNumofTransactions, getUserNumofTransactions, updateCreatedDate, getCreatedDate}

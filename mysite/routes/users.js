@@ -14,9 +14,29 @@ const LIMIT_ACTIONS_PER_DAY = 5;
     req.session.username = obj.name;
 
     //Initialize numbers transactions to 0 if it's a new day
-    console.log(req.session);
-    console.log("req.session._expires: ", req.session.cookie._expires);
+    let today = new Date().toLocaleDateString();
+    today =  formatDate(today);
+    let a = today.split("-");
+    today = a[2]+ "-" + a[1] + "-" + a[0];
+    console.log("today: ", today);
 
+    let tomorrow = new Date(Date(Date.now()));
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow = formatDate(tomorrow.toLocaleDateString());
+    let b = tomorrow.split("-");
+    tomorrow = b[2]+ "-" + b[1] + "-" + b[0];
+    console.log("tomorrow: ", tomorrow);
+    
+
+    const createdDate = await userBL.getCreatedDate(req.session.username);
+    console.log("createdDate: ", createdDate);
+
+
+    function formatDate(testdate) {
+      let date = testdate.split('/').join('-');
+      return date
+    }
+ 
     const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
     console.log("number Of Transactions for" , req.session.username , "is", numOfTrans);
 
