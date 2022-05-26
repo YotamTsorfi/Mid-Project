@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const userBL = require("../models/userBL");
+const LIMIT_ACTIONS_PER_DAY = 5;
 
   /* GET users listing. */
   router.get('/', function(req, res, next) {
@@ -10,13 +11,16 @@ const userBL = require("../models/userBL");
   router.post("/validation", async function (req, res, next) {
     const obj = req.body;
     const users = await userBL.checkCredentials(obj);
-    
     req.session.username = obj.name;
+
+    //Initialize numbers transactions to 0 if it's a new day
+    console.log(req.session);
+    console.log("req.session._expires: ", req.session.cookie._expires);
 
     const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
     console.log("number Of Transactions for" , req.session.username , "is", numOfTrans);
 
-    if (users) {
+    if ( (users && numOfTrans <= LIMIT_ACTIONS_PER_DAY && req.session.username != 'admin') || req.session.username == 'admin') {
       res.render("menuPage", { title: "Menu Page" , req});
     }
     else{

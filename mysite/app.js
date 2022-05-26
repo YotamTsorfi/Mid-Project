@@ -9,8 +9,6 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var movieRouter = require('./routes/movies');
-//var moviesRouter = require('./routes/movies');
-
 
 const session = require('express-session');
 
@@ -28,8 +26,6 @@ app.use(session({
     expires: new Date(Date.now() + (1000 * 60 * 60 * 24)) 
   }
 }));
-
-
 
 
 
