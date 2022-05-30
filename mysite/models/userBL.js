@@ -15,7 +15,7 @@ const updateNumofTransactions = async (username) => {
     }        
 }
 
-const updateCreatedDate = async (username, date) => {
+const updateCreatedDateAndZeroCounter = async (username, date) => {
     const users = await userDal.getUsers();
     const usersData = users.users;
     let newUsersData = usersData;
@@ -24,6 +24,7 @@ const updateCreatedDate = async (username, date) => {
 
     if(objIndex > -1){//Update this user        
         newUsersData[objIndex].CreatedDate = date;
+        newUsersData[objIndex].NumofTransactions = 0;
         const result = await userDal.updateOrAddUser(newUsersData);
         return result;
     }        
@@ -61,7 +62,7 @@ const checkCredentials = async (obj) => {
     const userCredentials = await userDal.getUsers();
     const usersObj = userCredentials.users;
 
-    const result = usersObj.find(x=> x.Username == username && x.Password == password && x.NumofTransactions > 0);
+    const result = usersObj.find(x=> x.Username == username && x.Password == password);
 
     if(result){
         return result;
@@ -122,4 +123,4 @@ const updateOrCreateUser = async (obj) => {
 }
 
 
-module.exports = {checkCredentials, getAllUsers, deleteUserByName, getUserByName, updateOrCreateUser, updateNumofTransactions, getUserNumofTransactions, updateCreatedDate, getCreatedDate}
+module.exports = {checkCredentials, getAllUsers, deleteUserByName, getUserByName, updateOrCreateUser, updateNumofTransactions, getUserNumofTransactions, updateCreatedDateAndZeroCounter, getCreatedDate}

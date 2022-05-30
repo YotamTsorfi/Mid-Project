@@ -8,37 +8,23 @@ const LIMIT_ACTIONS_PER_DAY = 5;
     res.send('respond with a resource');
   });
 
+
   router.post("/validation", async function (req, res, next) {
     const obj = req.body;
     const users = await userBL.checkCredentials(obj);
     req.session.username = obj.name;
 
-    //Initialize numbers transactions to 0 if it's a new day
-    let today = new Date().toLocaleDateString();
-    today =  formatDate(today);
-    let a = today.split("-");
-    today = a[2]+ "-" + a[1] + "-" + a[0];
-    console.log("today: ", today);
-
-    let tomorrow = new Date(Date(Date.now()));
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow = formatDate(tomorrow.toLocaleDateString());
-    let b = tomorrow.split("-");
-    tomorrow = b[2]+ "-" + b[1] + "-" + b[0];
-    console.log("tomorrow: ", tomorrow);
-    
-
     const createdDate = await userBL.getCreatedDate(req.session.username);
-    console.log("createdDate: ", createdDate);
+    let numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
+    
+    let today = getDats(obj.name).today;
+    let createdDate_ = createdDate;
 
-
-    function formatDate(testdate) {
-      let date = testdate.split('/').join('-');
-      return date
+    // if createdDate < today -- initialize to zero and update the createdDate
+    if (createdDate_ < today) {
+      await userBL.updateCreatedDateAndZeroCounter(req.session.username, today);  // update the createdDate
+      numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
     }
- 
-    const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
-    console.log("number Of Transactions for" , req.session.username , "is", numOfTrans);
 
     if ( (users && numOfTrans <= LIMIT_ACTIONS_PER_DAY && req.session.username != 'admin') || req.session.username == 'admin') {
       res.render("menuPage", { title: "Menu Page" , req});
@@ -84,5 +70,33 @@ const LIMIT_ACTIONS_PER_DAY = 5;
     const allusers = await userBL.getAllUsers();
     res.render('usermanagement', {allusers});
     });
+
+
+
+    function getDats(usersName){
+
+      function formatDate(testdate) {
+        let date = testdate.split('/').join('-');
+        return date
+      }
+
+      let today = new Date().toLocaleDateString();
+      today =  formatDate(today);
+      let a = today.split("-");
+      today = a[2]+ "-" + a[1] + "-" + a[0];
+      //console.log("today: ", today);
+  
+      let tomorrow = new Date(Date(Date.now()));
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow = formatDate(tomorrow.toLocaleDateString());
+      let b = tomorrow.split("-");
+      tomorrow = b[2]+ "-" + b[1] + "-" + b[0];
+      //console.log("tomorrow: ", tomorrow);
+  
+  
+      const dats = { today: today, tomorrow: tomorrow};
+  
+      return dats;
+    }
 
 module.exports = router;

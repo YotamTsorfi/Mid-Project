@@ -9,8 +9,7 @@ const LIMIT_ACTIONS_PER_DAY = 5;
     //1. Pressing create button count as 1 action        
     await userBL.updateNumofTransactions(req.session.username); 
     const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
-    console.log("numOfTrans: " , numOfTrans);
-
+    
     if ( (numOfTrans <= LIMIT_ACTIONS_PER_DAY && req.session.username != 'admin') || req.session.username == 'admin' ) {
       const obj = req.body;
       const result = await moviesBL.addMovie(obj);   
@@ -39,8 +38,7 @@ const LIMIT_ACTIONS_PER_DAY = 5;
      //1. Pressing create button count as 1 action        
     await userBL.updateNumofTransactions(req.session.username); 
     const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
-    console.log("numOfTrans: " , numOfTrans);
-
+    
     if ( (numOfTrans <= LIMIT_ACTIONS_PER_DAY && req.session.username != 'admin') || req.session.username == 'admin' ) {
       let name = req.params.name;  
       let movie = await moviesBL.getMovieDataByName(name);
@@ -51,15 +49,12 @@ const LIMIT_ACTIONS_PER_DAY = 5;
     }
   });
 
-
-
   router.post("/searchMovie", async function (req, res, next) {
     
     //1. Pressing search button count as 1 action        
     await userBL.updateNumofTransactions(req.session.username); 
     const numOfTrans = await userBL.getUserNumofTransactions(req.session.username);
-    console.log("numOfTrans: " , numOfTrans);
-    
+        
     if ( (numOfTrans <= LIMIT_ACTIONS_PER_DAY && req.session.username != 'admin') || req.session.username == 'admin' ) {
     //2. Send obj to moviesBL and get in return the movies
     //and  render "Search Results Page" and send their a new obj with all movies        
